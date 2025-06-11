@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floricultura Flor de Mandacaru - Tipos de Flores</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="/Flor-de-Mandacaru/assets/logo-flor-A-o3N-7j.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+
+  <script type="module" crossorigin src="/Flor-de-Mandacaru/assets/index-vPQRHdfh.js"></script>
+  <link rel="stylesheet" crossorigin href="/Flor-de-Mandacaru/assets/index-Boyyycae.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+          <div class="logo">
+            <img src="/Flor-de-Mandacaru/assets/logo-flor-A-o3N-7j.png" alt="Flor"> 
+            <h1>Flor de Mandacaru</h1>
+          </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#lista-cestas">Cestas</a></li>
+                    <li><a href="#lista-buques">Monte seu buquê</a></li>
+                    <li><a href="./contato.html">Contato</a></li>
+                    <li><a href="./carrinho.html">Ver Carrinho</a>
+                    </a></li>
+                </ul>
+            </nav>
+            <div class="header-carrinho">
+                <button id="btn-abrir-carrinho">
+                    <svg class="icone-carrinho" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Zm-9-1a2 2 0 0 1 4 0v1h-4Z"/>
+                    </svg>                    
+                    <span id="contador-carrinho">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="titulo-pagina">
+                <h2>Nossas Flores</h2>
+                <p>Descubra a beleza e a variedade das flores que selecionamos especialmente para você.</p>
+            </section>
+            <section id="lista-flores" class="lista-itens"></section>
+
+
+            <section class="titulo-pagina">
+                <h2>Nossas Cestas de Presente</h2>
+                <p>Opções variadas para surpreender em qualquer ocasião.</p>
+            </section>
+            <section id="lista-cestas" class="lista-itens"></section>
+
+
+            <section class="titulo-pagina">
+                <h2>Nossos Buquês</h2>
+                <p>Arranjos cuidadosamente elaborados para emocionar.</p>
+            </section>
+            <section id="lista-buques" class="lista-itens"></section>
+        </div>
+    </main>
+    <div id="overlay-carrinho"></div>
+
+        <aside id="sidebar-carrinho" class="carrinho-container">
+            <header class="carrinho-header">
+                <h3>Meu Carrinho</h3>
+                <button id="btn-fechar-carrinho">x</button>
+            </header>
+            <div id="itens-do-carrinho-container">
+                <p>Seu carrinho está vazio.</p>
+            </div>
+            <footer class="carrinho-footer">
+                <div id="total-carrinho">
+                </div>
+                <button id="btn-finalizar-compra">Finalizar Compra</button>
+            </footer>
+        </aside>
+
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; 2025 Floricultura Flor de Mandacaru. Todos os direitos reservados.</p>
+            <p>Sinta a beleza da natureza em cada pétala!</p>
+        </div>
+    </footer>
+
+</body>
