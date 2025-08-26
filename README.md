@@ -13,7 +13,7 @@ Funcionalidades e requisitos do projeto:
 - <code>localStorage</code>.🆗
 
 <b>Foram utilizados (Etapa 2):</b>
-- Regexp;
+- Regexp; 🆗
 - Requisição Assíncrona;
 - Back-end com Supabase;
 - Componentes ReactJS; 🆗

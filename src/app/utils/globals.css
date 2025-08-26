@@ -38,15 +38,20 @@ header h1 {
 }
 
 header img {
-    width: 50px; 
-    padding-right: 10px;
+  width: 60px;   
+  height: auto;
+  margin: 0;
+  padding: 0;
 }
 
-.logo{
-    display: flex;
-    justify-content: center;
 
+.logo {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px;            
 }
+
 
 header nav ul {
     list-style: none;
