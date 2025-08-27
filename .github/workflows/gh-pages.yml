@@ -20,16 +20,28 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_TELEMETRY_DISABLED: 1
+      CI: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run static
-      - run: cp out/index.html out/404.html
-      - uses: actions/upload-pages-artifact@v3
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Export static site
+        run: |
+          NODE_OPTIONS="--max_old_space_size=4096" npm run static
+          cp out/index.html out/404.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
