@@ -14,8 +14,8 @@ Funcionalidades e requisitos do projeto:
 
 <b>Foram utilizados (Etapa 2):</b>
 - Regexp; 🆗
-- Requisição Assíncrona;
-- Back-end com Supabase;
+- Requisição Assíncrona; 🆗
+- Back-end com Supabase; 🆗
 - Componentes ReactJS; 🆗
 - Gerencia de estado entre Componentes. 🆗
 
