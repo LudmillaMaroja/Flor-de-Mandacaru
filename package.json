@@ -5,8 +5,6 @@
 "scripts": {
   "dev": "next dev",
   "build": "next build",
-  "export": "next export",
-  "static": "npm run build && npm run export",
   "start": "next start",
   "preview:out": "npx serve out -p 3000"
 },
