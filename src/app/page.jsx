@@ -8,7 +8,7 @@ import CardItem from "./components/CardItem";
 import Carrinho from "./components/Carrinho";
 import DetalhesProdutoModal from "./components/DetalhesProdutoModal";
 
-import { supabase } from "./lib/supabaseClient";
+import { getSupabase } from "./lib/supabaseClient";
 import { catalogoCompleto } from "./data/itensLoja";
 
 import {
@@ -33,32 +33,42 @@ export default function HomePage() {
     [carrinho]
   );
 
-  /* ----------------- Produtos (Supabase + fallback) ----------------- */
-  const [produtosDB, setProdutosDB] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState("");
+/* ----------------- Produtos (Supabase + fallback) ----------------- */
+const [produtosDB, setProdutosDB] = useState([]);
+const [loading, setLoading] = useState(true);
+const [erro, setErro] = useState("");
 
-  useEffect(() => {
-    let ativo = true;
-    (async () => {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from("produtos")
-          .select("*")
-          .order("nome");
-        if (error) throw error;
-        if (ativo) setProdutosDB(data ?? []);
-      } catch (e) {
-        setErro("Falha ao carregar produtos.");
-      } finally {
-        if (ativo) setLoading(false);
+useEffect(() => {
+  let ativo = true;
+  (async () => {
+    try {
+      setLoading(true);
+
+      // cria o client só no cliente
+      const supabase = getSupabase();
+
+      if (!supabase) {
+        throw new Error("Supabase não inicializado.");
       }
-    })();
-    return () => {
-      ativo = false;
-    };
-  }, []);
+
+      const { data, error } = await supabase
+        .from("produtos")
+        .select("*")
+        .order("nome");
+
+      if (error) throw error;
+      if (ativo) setProdutosDB(data ?? []);
+    } catch (e) {
+      setErro("Falha ao carregar produtos.");
+    } finally {
+      if (ativo) setLoading(false);
+    }
+  })();
+  return () => {
+    ativo = false;
+  };
+}, []);
+
 
   const produtosNormalizados = useMemo(
     () =>
