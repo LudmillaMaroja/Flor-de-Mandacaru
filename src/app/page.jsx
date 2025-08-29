@@ -86,7 +86,66 @@ export default function HomePage() {
   const abrirDetalhes = (produto) => setProdutoSelecionado(produto);
   const fecharDetalhes = () => setProdutoSelecionado(null);
 
-  /* ----------------- Render ----------------- */
+  // ========================================================================
+  // FUNÇÃO PARA FINALIZAR A COMPRA E SALVAR NO SUPABASE
+  // ========================================================================
+  async function handleCheckout(dadosDoCheckout) {
+    // 'dadosDoCheckout' é o objeto que o componente Carrinho envia: { subtotal, total, ETC}
+    if (carrinho.length === 0) {
+      alert("Seu carrinho está vazio!");
+      return;
+    }
+
+    try {
+      //Insere o pedido principal na tabela 'pedidos'
+      const { data: pedidoData, error: pedidoError } = await supabase
+        .from('pedidos')
+        .insert({
+          valor_subtotal: dadosDoCheckout.subtotal,
+          valor_total: dadosDoCheckout.total,
+          cupom_utilizado: dadosDoCheckout.cupom,
+          percentual_desconto: dadosDoCheckout.percent,
+          valor_desconto: dadosDoCheckout.desconto,
+        })
+        .select('id')
+        .single();
+
+      if (pedidoError) throw pedidoError;
+      console.log('DADOS DO PEDIDO CRIADO:', pedidoData); 
+      const novoPedidoId = pedidoData.id;
+
+      // Prepara os itens para salvar na tabela 'itens_do_pedido'
+      const itensParaSalvar = carrinho.map(item => ({
+        pedido_id: novoPedidoId, 
+        produto_id: item.id,
+        nome_produto: item.nome,
+        quantidade: item.quantidade,
+        preco_unitario: item.preco,
+      }));
+
+      // Insere os itens na tabela 'itens_do_pedido'
+      const { error: itensError } = await supabase
+        .from('itens_do_pedido')
+        .insert(itensParaSalvar);
+      
+      if (itensError) throw itensError;
+
+      // Limpa o carrinho e avisa o usuário.
+      alert('Pedido finalizado com sucesso! Obrigado pela sua compra!');
+      // Limpa o carrinho no estado e no localStorage
+      setCarrinho([]); 
+      if (typeof window !== "undefined") {
+        localStorage.removeItem('carrinho-flor'); 
+      }
+      setAberto(false);
+
+    } catch (error) {
+      console.error('Erro ao finalizar a compra:', error);
+      alert('Não foi possível processar seu pedido. Por favor, tente novamente.');
+    }
+  }
+
+  
   return (
     <>
       <Header cartCount={cartCount} onOpenCart={() => setAberto(true)} />
@@ -197,9 +256,7 @@ export default function HomePage() {
           removerDoCarrinho(id);
           refresh();
         }}
-        onCheckout={() => {
-          alert("Compra finalizada!");
-        }}
+        onCheckout={handleCheckout} 
       />
 
       <Footer />

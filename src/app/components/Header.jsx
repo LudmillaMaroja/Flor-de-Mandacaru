@@ -6,7 +6,7 @@ export default function Header({ cartCount = 0, onOpenCart }) {
     <header>
       <div className="container">
         <div className="logo">
-          <Image src="/img/logo-flor.png" alt="Flor" width={40} height={40} />
+          <img src="./img/logo-flor.png" alt="Flor" width={40} height={40} />
           <h1>Flor de Mandacaru</h1>
         </div>
 
