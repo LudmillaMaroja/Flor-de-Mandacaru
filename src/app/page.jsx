@@ -8,7 +8,7 @@ import CardItem from "./components/CardItem";
 import Carrinho from "./components/Carrinho";
 import DetalhesProdutoModal from "./components/DetalhesProdutoModal";
 
-import { getSupabase } from "./lib/supabaseClient";
+import { getSupabase } from "./lib/supabaseClient.ts";
 import { catalogoCompleto } from "./data/itensLoja";
 
 import {
@@ -33,42 +33,42 @@ export default function HomePage() {
     [carrinho]
   );
 
-/* ----------------- Produtos (Supabase + fallback) ----------------- */
-const [produtosDB, setProdutosDB] = useState([]);
-const [loading, setLoading] = useState(true);
-const [erro, setErro] = useState("");
+  /* ----------------- Produtos (Supabase + fallback) ----------------- */
+  const [produtosDB, setProdutosDB] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState("");
 
-useEffect(() => {
-  let ativo = true;
-  (async () => {
-    try {
-      setLoading(true);
+  useEffect(() => {
+    let ativo = true;
+    (async () => {
+      try {
+        setLoading(true);
+        const supabase = getSupabase();
 
-      // cria o client só no cliente
-      const supabase = getSupabase();
+        if (!supabase) {
+          // O novo client vai logar um warn, então não precisamos de outro erro aqui.
+          // Apenas retornamos para não continuar a execução.
+          return;
+        }
 
-      if (!supabase) {
-        throw new Error("Supabase não inicializado.");
+        const { data, error } = await supabase
+          .from("produtos")
+          .select("*")
+          .order("nome");
+
+        if (error) throw error;
+        if (ativo) setProdutosDB(data ?? []);
+      } catch (e) {
+        setErro("Falha ao carregar produtos.");
+        console.error(e);
+      } finally {
+        if (ativo) setLoading(false);
       }
-
-      const { data, error } = await supabase
-        .from("produtos")
-        .select("*")
-        .order("nome");
-
-      if (error) throw error;
-      if (ativo) setProdutosDB(data ?? []);
-    } catch (e) {
-      setErro("Falha ao carregar produtos.");
-    } finally {
-      if (ativo) setLoading(false);
-    }
-  })();
-  return () => {
-    ativo = false;
-  };
-}, []);
-
+    })();
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   const produtosNormalizados = useMemo(
     () =>
@@ -100,7 +100,13 @@ useEffect(() => {
   // FUNÇÃO PARA FINALIZAR A COMPRA E SALVAR NO SUPABASE
   // ========================================================================
   async function handleCheckout(dadosDoCheckout) {
-    // 'dadosDoCheckout' é o objeto que o componente Carrinho envia: { subtotal, total, ETC}
+    const supabase = getSupabase(); // <-- A CORREÇÃO ESTÁ AQUI!
+
+    if (!supabase) {
+        alert("Não foi possível conectar ao banco de dados.");
+        return;
+    }
+
     if (carrinho.length === 0) {
       alert("Seu carrinho está vazio!");
       return;
@@ -121,12 +127,12 @@ useEffect(() => {
         .single();
 
       if (pedidoError) throw pedidoError;
-      console.log('DADOS DO PEDIDO CRIADO:', pedidoData); 
+      console.log('DADOS DO PEDIDO CRIADO:', pedidoData);
       const novoPedidoId = pedidoData.id;
 
       // Prepara os itens para salvar na tabela 'itens_do_pedido'
       const itensParaSalvar = carrinho.map(item => ({
-        pedido_id: novoPedidoId, 
+        pedido_id: novoPedidoId,
         produto_id: item.id,
         nome_produto: item.nome,
         quantidade: item.quantidade,
@@ -143,9 +149,9 @@ useEffect(() => {
       // Limpa o carrinho e avisa o usuário.
       alert('Pedido finalizado com sucesso! Obrigado pela sua compra!');
       // Limpa o carrinho no estado e no localStorage
-      setCarrinho([]); 
+      setCarrinho([]);
       if (typeof window !== "undefined") {
-        localStorage.removeItem('carrinho-flor'); 
+        localStorage.removeItem('carrinho-flor'); // <-- Use a chave correta do seu localStorage!
       }
       setAberto(false);
 
@@ -155,7 +161,6 @@ useEffect(() => {
     }
   }
 
-  
   return (
     <>
       <Header cartCount={cartCount} onOpenCart={() => setAberto(true)} />
@@ -266,7 +271,7 @@ useEffect(() => {
           removerDoCarrinho(id);
           refresh();
         }}
-        onCheckout={handleCheckout} 
+        onCheckout={handleCheckout}
       />
 
       <Footer />
