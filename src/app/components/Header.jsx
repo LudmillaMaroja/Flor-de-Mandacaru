@@ -14,7 +14,7 @@ export default function Header({ cartCount = 0, onOpenCart }) {
           <ul>
             <li><a href="#">Início</a></li>
             <li><a href="#lista-cestas">Cestas</a></li>
-            <li><a href="#lista-buques">Monte seu buquê</a></li>
+            <li><a href="#lista-buques">Buquês</a></li>
             <li><a href="/contato">Contato</a></li>
           </ul>
         </nav>

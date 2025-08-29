@@ -46,8 +46,6 @@ export default function HomePage() {
         const supabase = getSupabase();
 
         if (!supabase) {
-          // O novo client vai logar um warn, então não precisamos de outro erro aqui.
-          // Apenas retornamos para não continuar a execução.
           return;
         }
 
@@ -100,7 +98,7 @@ export default function HomePage() {
   // FUNÇÃO PARA FINALIZAR A COMPRA E SALVAR NO SUPABASE
   // ========================================================================
   async function handleCheckout(dadosDoCheckout) {
-    const supabase = getSupabase(); // <-- A CORREÇÃO ESTÁ AQUI!
+    const supabase = getSupabase(); 
 
     if (!supabase) {
         alert("Não foi possível conectar ao banco de dados.");
@@ -151,7 +149,7 @@ export default function HomePage() {
       // Limpa o carrinho no estado e no localStorage
       setCarrinho([]);
       if (typeof window !== "undefined") {
-        localStorage.removeItem('carrinho-flor'); // <-- Use a chave correta do seu localStorage!
+        localStorage.removeItem('carrinho-flor'); 
       }
       setAberto(false);
 
@@ -179,21 +177,27 @@ export default function HomePage() {
             </p>
           </section>
           <section id="lista-flores" className="lista-itens">
-            {flores.map((item) => (
-              <CardItem
-                key={item.id}
-                item={item}
-                onAdd={(id) => {
-                  adicionarAoCarrinho(id);
-                  refresh();
-                }}
-                onMinus={(id) => {
-                  diminuirQuantidadeNoCarrinho(id);
-                  refresh();
-                }}
-                onAbrirDetalhes={abrirDetalhes}
-              />
-            ))}
+            {/* ===== MUDANÇA AQUI: Lógica para passar a quantidade para o CardItem ===== */}
+            {flores.map((item) => {
+              const itemNoCarrinho = carrinho.find(cartItem => cartItem.id === item.id);
+              const quantidade = itemNoCarrinho ? itemNoCarrinho.quantidade : 0;
+              return (
+                <CardItem
+                  key={item.id}
+                  item={item}
+                  quantidadeNoCarrinho={quantidade}
+                  onAdd={(id) => {
+                    adicionarAoCarrinho(id);
+                    refresh();
+                  }}
+                  onMinus={(id) => {
+                    diminuirQuantidadeNoCarrinho(id);
+                    refresh();
+                  }}
+                  onAbrirDetalhes={abrirDetalhes}
+                />
+              );
+            })}
           </section>
 
           {/* CESTAS */}
@@ -202,21 +206,27 @@ export default function HomePage() {
             <p>Opções variadas para surpreender em qualquer ocasião.</p>
           </section>
           <section id="lista-cestas" className="lista-itens">
-            {cestas.map((item) => (
-              <CardItem
-                key={item.id}
-                item={item}
-                onAdd={(id) => {
-                  adicionarAoCarrinho(id);
-                  refresh();
-                }}
-                onMinus={(id) => {
-                  diminuirQuantidadeNoCarrinho(id);
-                  refresh();
-                }}
-                onAbrirDetalhes={abrirDetalhes}
-              />
-            ))}
+            {/* ===== MUDANÇA AQUI: Lógica para passar a quantidade para o CardItem ===== */}
+            {cestas.map((item) => {
+              const itemNoCarrinho = carrinho.find(cartItem => cartItem.id === item.id);
+              const quantidade = itemNoCarrinho ? itemNoCarrinho.quantidade : 0;
+              return (
+                <CardItem
+                  key={item.id}
+                  item={item}
+                  quantidadeNoCarrinho={quantidade}
+                  onAdd={(id) => {
+                    adicionarAoCarrinho(id);
+                    refresh();
+                  }}
+                  onMinus={(id) => {
+                    diminuirQuantidadeNoCarrinho(id);
+                    refresh();
+                  }}
+                  onAbrirDetalhes={abrirDetalhes}
+                />
+              );
+            })}
           </section>
 
           {/* BUQUÊS */}
@@ -225,21 +235,27 @@ export default function HomePage() {
             <p>Arranjos cuidadosamente elaborados para emocionar.</p>
           </section>
           <section id="lista-buques" className="lista-itens">
-            {buques.map((item) => (
-              <CardItem
-                key={item.id}
-                item={item}
-                onAdd={(id) => {
-                  adicionarAoCarrinho(id);
-                  refresh();
-                }}
-                onMinus={(id) => {
-                  diminuirQuantidadeNoCarrinho(id);
-                  refresh();
-                }}
-                onAbrirDetalhes={abrirDetalhes}
-              />
-            ))}
+            {/* ===== MUDANÇA AQUI: Lógica para passar a quantidade para o CardItem ===== */}
+            {buques.map((item) => {
+              const itemNoCarrinho = carrinho.find(cartItem => cartItem.id === item.id);
+              const quantidade = itemNoCarrinho ? itemNoCarrinho.quantidade : 0;
+              return (
+                <CardItem
+                  key={item.id}
+                  item={item}
+                  quantidadeNoCarrinho={quantidade}
+                  onAdd={(id) => {
+                    adicionarAoCarrinho(id);
+                    refresh();
+                  }}
+                  onMinus={(id) => {
+                    diminuirQuantidadeNoCarrinho(id);
+                    refresh();
+                  }}
+                  onAbrirDetalhes={abrirDetalhes}
+                />
+              );
+            })}
           </section>
         </div>
       </main>
