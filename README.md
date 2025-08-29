@@ -1,6 +1,6 @@
 Bem-vindos ao repositório da <i>Floricultura Flor de Mandacaru!</i> Este site é um projeto feito para a disciplina Linguagens de Script(LS) e mostra os produtos vendidos em uma floricultura fictícia.
 
-Página: https://teooodbs.github.io/Flor-de-Mandacaru/
+Página: https://ludmillamaroja.github.io/Flor-de-Mandacaru/
 <hr>
 
 Funcionalidades e requisitos do projeto:
