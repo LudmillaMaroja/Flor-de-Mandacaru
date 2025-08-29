@@ -8,9 +8,10 @@ import CardItem from "./components/CardItem";
 import Carrinho from "./components/Carrinho";
 import DetalhesProdutoModal from "./components/DetalhesProdutoModal";
 import CheckoutModal from "./components/CheckoutModal";
+import ContatoModal from "./components/ContatoModal"; // 1. IMPORTAÇÃO ADICIONADA
 
 import { getSupabase } from "./lib/supabaseClient.ts";
-import { catalogoCompleto } from "./data/itensLoja"; // <-- A fonte da verdade para os produtos
+import { catalogoCompleto } from "./data/itensLoja";
 
 import {
   lerCarrinho,
@@ -26,7 +27,10 @@ export default function HomePage() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [dadosParaCheckout, setDadosParaCheckout] = useState(null);
-  console.log("O modal de checkout está aberto?", isCheckoutOpen);
+
+
+  const [isContatoOpen, setIsContatoOpen] = useState(false);
+
   useEffect(() => {
     setCarrinho(lerCarrinho());
   }, []);
@@ -37,10 +41,7 @@ export default function HomePage() {
     [carrinho]
   );
 
-  // A 'fonte' dos nossos produtos agora é sempre o arquivo local.
   const fonte = catalogoCompleto;
-
-  // A lógica para separar por categoria continua a mesma.
   const flores = useMemo(() => fonte.filter((i) => i.categoria === "Flores"), [fonte]);
   const cestas = useMemo(() => fonte.filter((i) => i.categoria === "Cestas de Presente"), [fonte]);
   const buques = useMemo(() => fonte.filter((i) => i.categoria === "Buquês"), [fonte]);
@@ -48,7 +49,6 @@ export default function HomePage() {
   const abrirDetalhes = (produto) => setProdutoSelecionado(produto);
   const fecharDetalhes = () => setProdutoSelecionado(null);
 
-  // A função de checkout continua funcionando normalmente!
   async function handleCheckout(dadosDoCarrinho, dadosDoCliente) {
     const supabase = getSupabase();
     if (!supabase) { alert("Não foi possível conectar ao banco de dados."); return; }
@@ -96,10 +96,15 @@ export default function HomePage() {
 
   return (
     <>
-      <Header cartCount={cartCount} onOpenCart={() => setAberto(true)} />
+    
+      <Header 
+        cartCount={cartCount} 
+        onOpenCart={() => setAberto(true)} 
+        onOpenContato={() => setIsContatoOpen(true)}
+      />
+
       <main>
         <div className="container">
-          {/* Não precisamos mais de 'loading' ou 'erro' aqui */}
           <section className="titulo-pagina"><h2>Nossas Flores</h2><p>Descubra a beleza e a variedade das flores que selecionamos especialmente para você.</p></section>
           <section id="lista-flores" className="lista-itens">{flores.map((item) => { const itemNoCarrinho = carrinho.find(cartItem => cartItem.id === item.id); const quantidade = itemNoCarrinho ? itemNoCarrinho.quantidade : 0; return (<CardItem key={item.id} item={item} quantidadeNoCarrinho={quantidade} onAdd={(id) => { adicionarAoCarrinho(id); refresh(); }} onMinus={(id) => { diminuirQuantidadeNoCarrinho(id); refresh(); }} onAbrirDetalhes={abrirDetalhes} />); })}</section>
           <section className="titulo-pagina"><h2>Nossas Cestas de Presente</h2><p>Opções variadas para surpreender em qualquer ocasião.</p></section>
@@ -108,7 +113,9 @@ export default function HomePage() {
           <section id="lista-buques" className="lista-itens">{buques.map((item) => { const itemNoCarrinho = carrinho.find(cartItem => cartItem.id === item.id); const quantidade = itemNoCarrinho ? itemNoCarrinho.quantidade : 0; return (<CardItem key={item.id} item={item} quantidadeNoCarrinho={quantidade} onAdd={(id) => { adicionarAoCarrinho(id); refresh(); }} onMinus={(id) => { diminuirQuantidadeNoCarrinho(id); refresh(); }} onAbrirDetalhes={abrirDetalhes} />); })}</section>
         </div>
       </main>
+
       <DetalhesProdutoModal produto={produtoSelecionado} onFechar={fecharDetalhes} onAdicionar={(id) => { adicionarAoCarrinho(id); refresh(); fecharDetalhes(); }} />
+      
       <Carrinho
         aberto={aberto}
         itens={carrinho}
@@ -122,12 +129,19 @@ export default function HomePage() {
           setAberto(false);
         }}
       />
+      
       <CheckoutModal 
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         onSubmit={handleCheckout}
         cartTotals={dadosParaCheckout}
       />
+      
+      <ContatoModal 
+        isOpen={isContatoOpen}
+        onClose={() => setIsContatoOpen(false)}
+      />
+
       <Footer />
     </>
   );
