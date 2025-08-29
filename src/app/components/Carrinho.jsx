@@ -23,7 +23,7 @@ export default function Carrinho({
   const [percent, setPercent] = useState(0);
   const [erroCupom, setErroCupom] = useState("");
 
-  // carrega cupom salvo
+  // carrega cupom salvo.
   useEffect(() => {
     const salvo = typeof window !== "undefined" ? localStorage.getItem(CUPOM_KEY) : null;
     if (salvo) {
