@@ -24,24 +24,28 @@ jobs:
       CI: false
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
+      - name: Check env presence (no values printed)
+        run: |
+          test -n "$NEXT_PUBLIC_SUPABASE_URL" || (echo "URL missing" && exit 1)
+          test -n "$NEXT_PUBLIC_SUPABASE_ANON_KEY" || (echo "KEY missing" && exit 1)
+
       - name: Install deps
         run: npm install
 
-      - name: Build (static export via next.config output:export)
+      - name: Build (output:export already)
         run: |
           NODE_OPTIONS="--max_old_space_size=4096" npm run build
           cp out/index.html out/404.html
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
+
 
   deploy:
     needs: build
