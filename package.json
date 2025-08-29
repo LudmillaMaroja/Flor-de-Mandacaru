@@ -2,14 +2,14 @@
   "name": "flor-de-mandacaru",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "export": "next export",
-    "static": "npm run build && npm run export",
-    "start": "next start",
-    "preview:out": "npx serve out -p 3000"
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "export": "next export",
+  "static": "npm run build && npm run export",
+  "start": "next start",
+  "preview:out": "npx serve out -p 3000"
+},
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
     "next": "^15.5.2",

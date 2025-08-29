@@ -14,6 +14,13 @@ const nextConfig: NextConfig = {
 
   // ajuda o Pages a servir /pasta/index.html
   trailingSlash: true,
-};
+
+    env: {
+    NEXT_PUBLIC_BASE_PATH: "/Flor-de-Mandacaru",
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+},
+
+  };
 
 export default nextConfig;
